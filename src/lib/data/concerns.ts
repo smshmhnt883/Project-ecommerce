@@ -1,0 +1,58 @@
+import { Concern } from '@/types';
+
+export const CONCERNS: Concern[] = [
+  {
+    id: 'concern-oral-care',
+    name: 'Oral Hygiene & Enamel Care',
+    slug: 'oral-care',
+    tagline: 'Herbal protection with Babool, Akarkara, and Clove',
+    description: 'Ayurvedic dental paste and herbal oral formulations crafted to support healthy gums and lasting natural breath.',
+    image: '/products/patanjali-dant-kanti.jpg',
+    accentColor: '#242424',
+  },
+  {
+    id: 'concern-hair-care',
+    name: 'Hair Nourishment & Scalp Care',
+    slug: 'hair-care',
+    tagline: 'Pure Aloe Vera, Shikakai & root conditioning',
+    description: 'Gentle herbal shampoos and conditioners formulated to cleanse dirt without drying the scalp lipid mantle.',
+    image: '/products/patanjali-kesh-kanti-aloe-vera.jpg',
+    accentColor: '#2E533E',
+  },
+  {
+    id: 'concern-skin-care',
+    name: 'Skin Hydration & Soothing Glow',
+    slug: 'skin-care',
+    tagline: 'Pure Aloe Vera pulp and hydro-distilled Rose Water',
+    description: 'Clean cooling gels and natural floral mists to soothe irritation, tighten pores, and retain skin moisture.',
+    image: '/products/patanjali-aloe-vera-gel.jpg',
+    accentColor: '#D4A373',
+  },
+  {
+    id: 'concern-immunity-nutrition',
+    name: 'Immunity & Seasonal Defense',
+    slug: 'immunity-nutrition',
+    tagline: 'Amla-rich Chyawanprash, Pure Honey & Giloy Ghan Vati',
+    description: 'Classical Rasayanas and standardized herb extracts to reinforce cellular resistance and seasonal immunity.',
+    image: '/products/patanjali-chyawanprash.jpg',
+    accentColor: '#4A6B50',
+  },
+  {
+    id: 'concern-daily-wellness',
+    name: 'Daily Vitality & Nutrition',
+    slug: 'daily-wellness',
+    tagline: 'Pure Cow Desi Ghee & Ayurvedic energy builders',
+    description: 'Vedic culinary staples and health supplements that nourish the seven Dhatus and sustain daily vigor.',
+    image: '/products/patanjali-cow-ghee.jpg',
+    accentColor: '#B96B43',
+  },
+  {
+    id: 'concern-digestive-wellness',
+    name: 'Digestive Harmony & Whole Grains',
+    slug: 'digestive-wellness',
+    tagline: 'Traditional stone-ground whole wheat chakki atta',
+    description: 'Fiber-rich unadulterated whole grain staples to promote healthy digestion and sustained nutritional wellness.',
+    image: '/products/patanjali-whole-wheat-atta.jpg',
+    accentColor: '#7A6B53',
+  },
+];
