@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { Product } from '@/types';
 import { useToast } from './ToastContext';
 import { useCart } from './CartContext';
@@ -19,6 +19,13 @@ interface WishlistContextType {
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
+const WISHLIST_STORAGE_PREFIX = 'patanjali_wishlist_';
+const GUEST_WISHLIST_KEY = 'patanjali_wishlist_guest';
+
+function getWishlistStorageKey(userId?: string | null): string {
+  return userId ? `${WISHLIST_STORAGE_PREFIX}${userId}` : GUEST_WISHLIST_KEY;
+}
+
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<Product[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -26,10 +33,15 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const { addToCart } = useCart();
   const { user, isAuthenticated } = useAuth();
 
+  const previousUserIdRef = useRef<string | null | undefined>(undefined);
+
   // Load from local storage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('patanjali_wishlist');
+      localStorage.removeItem('patanjali_wishlist'); // Clean legacy un-scoped key
+      const currentUserId = isAuthenticated && user?.id ? user.id : null;
+      const key = getWishlistStorageKey(currentUserId);
+      const saved = localStorage.getItem(key);
       if (saved) {
         setWishlist(JSON.parse(saved));
       }
@@ -40,43 +52,91 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Sync with InsForge wishlist_items when user is logged in
+  const syncRemoteWishlist = useCallback(async (userId: string) => {
+    try {
+      const { data, error } = await insforge.database
+        .from('wishlist_items')
+        .select('product_id')
+        .eq('user_id', userId);
+
+      if (!error && data) {
+        const productIds = new Set(data.map((d: any) => d.product_id));
+        const remoteProducts = PRODUCTS.filter((p) => productIds.has(p.id));
+        setWishlist(remoteProducts);
+        try {
+          localStorage.setItem(getWishlistStorageKey(userId), JSON.stringify(remoteProducts));
+        } catch {}
+      }
+    } catch (err) {
+      console.warn('Wishlist sync warning:', err);
+    }
+  }, []);
+
+  // Handle auth transitions: Log in, Log out, Account switch
   useEffect(() => {
-    const userId = user?.id;
-    if (!isAuthenticated || !userId) {
+    if (!isInitialized) return;
+
+    const currentUserId = isAuthenticated && user?.id ? user.id : null;
+
+    if (previousUserIdRef.current === undefined) {
+      previousUserIdRef.current = currentUserId;
+      if (currentUserId) {
+        syncRemoteWishlist(currentUserId);
+      }
       return;
     }
 
-    async function syncWishlist() {
-      try {
-        const { data, error } = await insforge.database
-          .from('wishlist_items')
-          .select('product_id')
-          .eq('user_id', userId);
+    const prevUserId = previousUserIdRef.current;
+    previousUserIdRef.current = currentUserId;
 
-        if (!error && data && data.length > 0) {
-          const productIds = new Set(data.map((d: any) => d.product_id));
-          const remoteProducts = PRODUCTS.filter((p) => productIds.has(p.id));
-          if (remoteProducts.length > 0) {
-            setWishlist(remoteProducts);
-          }
-        }
-      } catch (err) {
-        console.warn('Wishlist sync warning:', err);
-      }
+    // 1. Logout: reset wishlist to empty
+    if (prevUserId && !currentUserId) {
+      setWishlist([]);
+      try {
+        localStorage.removeItem(GUEST_WISHLIST_KEY);
+      } catch {}
+      return;
     }
 
-    syncWishlist();
-  }, [isAuthenticated, user?.id]);
+    // 2. Account switch: clear old user items and load new user's items
+    if (prevUserId && currentUserId && prevUserId !== currentUserId) {
+      setWishlist([]);
+      syncRemoteWishlist(currentUserId);
+      return;
+    }
 
+    // 3. Guest login: load remote wishlist
+    if (!prevUserId && currentUserId) {
+      syncRemoteWishlist(currentUserId);
+      return;
+    }
+  }, [isAuthenticated, user?.id, isInitialized, syncRemoteWishlist]);
+
+  // Listen to explicit auth:logout
+  useEffect(() => {
+    const handleLogout = () => {
+      setWishlist([]);
+      try {
+        localStorage.removeItem(GUEST_WISHLIST_KEY);
+        localStorage.removeItem('patanjali_wishlist');
+      } catch {}
+    };
+
+    window.addEventListener('auth:logout', handleLogout);
+    return () => window.removeEventListener('auth:logout', handleLogout);
+  }, []);
+
+  // Save to scoped storage
   useEffect(() => {
     if (!isInitialized) return;
     try {
-      localStorage.setItem('patanjali_wishlist', JSON.stringify(wishlist));
+      const currentUserId = isAuthenticated && user?.id ? user.id : null;
+      const key = getWishlistStorageKey(currentUserId);
+      localStorage.setItem(key, JSON.stringify(wishlist));
     } catch (e) {
       console.error('Failed to save wishlist', e);
     }
-  }, [wishlist, isInitialized]);
+  }, [wishlist, isInitialized, isAuthenticated, user?.id]);
 
   const isInWishlist = (productId: string) => {
     return wishlist.some((item) => item.id === productId);

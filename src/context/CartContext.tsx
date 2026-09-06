@@ -1,12 +1,19 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { Product, CartItem, Coupon } from '@/types';
 import { validateAndApplyCoupon } from '@/lib/data/coupons';
 import { useToast } from './ToastContext';
 import { useAuth } from './AuthContext';
 import { insforge } from '@/lib/insforge';
-import { PRODUCTS } from '@/lib/data/products';
+import {
+  getCartStorageKey,
+  getCouponStorageKey,
+  clearGuestCartStorage,
+  clearAllLegacyStorage,
+  fetchRemoteCart,
+  reconcileGuestCartWithRemote,
+} from '@/services/cart';
 
 interface CartContextType {
   cart: CartItem[];
@@ -43,14 +50,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { showToast } = useToast();
   const { user, isAuthenticated } = useAuth();
 
-  // Load initial cart
+  // Track previous user to detect logins, logouts, and account switches
+  const previousUserIdRef = useRef<string | null | undefined>(undefined);
+
+  // Load initial cart from client-side storage on mount
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem('patanjali_cart');
+      clearAllLegacyStorage();
+      const currentUserId = isAuthenticated && user?.id ? user.id : null;
+      const cartKey = getCartStorageKey(currentUserId);
+      const savedCart = localStorage.getItem(cartKey);
       if (savedCart) {
         setCart(JSON.parse(savedCart));
       }
-      const savedCoupon = localStorage.getItem('patanjali_coupon');
+
+      const couponKey = getCouponStorageKey(currentUserId);
+      const savedCoupon = localStorage.getItem(couponKey);
       if (savedCoupon) {
         const parsed = JSON.parse(savedCoupon);
         setAppliedCoupon(parsed.coupon);
@@ -63,140 +78,106 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Sync / Reconcile guest cart with InsForge when user logs in
-  useEffect(() => {
-    const userId = user?.id;
-    if (!isAuthenticated || !userId) return;
-
-    async function reconcileGuestCart() {
-      try {
-        // 1. Fetch existing remote cart items from InsForge
-        const { data: remoteData, error: fetchError } = await insforge.database
-          .from('cart_items')
-          .select('*')
-          .eq('user_id', userId);
-
-        let remoteItems: any[] = !fetchError && remoteData ? [...remoteData] : [];
-
-        // 2. Read temporary guest cart items from localStorage
-        let guestItems: CartItem[] = [];
+  // Sync user cart helper
+  const syncUserCart = useCallback(async (userId: string, allowGuestReconcile: boolean) => {
+    try {
+      let guestItems: CartItem[] = [];
+      if (allowGuestReconcile) {
         try {
-          const guestCartJson = localStorage.getItem('patanjali_cart');
-          if (guestCartJson) {
-            guestItems = JSON.parse(guestCartJson);
+          const guestJson = localStorage.getItem(getCartStorageKey(null));
+          if (guestJson) {
+            guestItems = JSON.parse(guestJson);
           }
-        } catch {}
-
-        // 3. Reconcile if guest items exist
-        if (guestItems.length > 0) {
-          for (const guestItem of guestItems) {
-            const size = guestItem.selectedSize || guestItem.product.size;
-            const maxStock = guestItem.product.stock || 99;
-
-            const existingRemote = remoteItems.find(
-              (r) => r.product_id === guestItem.product.id && (r.selected_size || '') === (size || '')
-            );
-
-            if (existingRemote) {
-              // Product exists in both: sum quantities respecting max inventory
-              const summedQty = Math.min(existingRemote.quantity + guestItem.quantity, maxStock);
-              await insforge.database
-                .from('cart_items')
-                .update({ quantity: summedQty })
-                .eq('id', existingRemote.id);
-              existingRemote.quantity = summedQty;
-            } else {
-              // Product only exists in guest cart: add to user's remote database cart
-              const newQty = Math.min(guestItem.quantity, maxStock);
-              const { data: inserted } = await insforge.database
-                .from('cart_items')
-                .insert({
-                  user_id: userId,
-                  product_id: guestItem.product.id,
-                  quantity: newQty,
-                  selected_size: size,
-                })
-                .select();
-
-              if (inserted && inserted.length > 0) {
-                remoteItems.push(inserted[0]);
-              } else {
-                remoteItems.push({
-                  user_id: userId,
-                  product_id: guestItem.product.id,
-                  quantity: newQty,
-                  selected_size: size,
-                });
-              }
-            }
-          }
-
-          // Clear temporary guest cart from localStorage
-          localStorage.removeItem('patanjali_cart');
+        } catch (e) {
+          console.warn('Error reading guest cart for reconcile:', e);
         }
-
-        // 4. Map remoteItems to CartItem[] as the single source of truth
-        const merged: CartItem[] = remoteItems.map((row: any) => {
-          const product = PRODUCTS.find((p) => p.id === row.product_id) || {
-            id: row.product_id,
-            name: 'Ayurvedic Product',
-            slug: 'product',
-            category: 'Wellness',
-            categorySlug: 'wellness',
-            concernSlugs: [],
-            description: '',
-            shortDescription: '',
-            price: 150,
-            mrp: 175,
-            discount: 14,
-            images: ['/products/patanjali-dant-kanti.jpg'],
-            thumbnail: '/products/patanjali-dant-kanti.jpg',
-            sku: `PAT-${row.product_id}`,
-            size: row.selected_size || 'Standard',
-            stock: 100,
-            inStock: true,
-            rating: 4.8,
-            reviewCount: 120,
-            featured: false,
-            bestseller: false,
-            ingredients: [],
-            benefits: [],
-            usage: '',
-            manufacturer: {
-              name: 'Patanjali Ayurved Limited',
-              address: 'Haridwar, Uttarakhand',
-              license: 'A-2878/99',
-              shelfLife: '24 Months',
-              countryOfOrigin: 'India',
-            },
-          };
-
-          return {
-            product,
-            quantity: row.quantity,
-            selectedSize: row.selected_size || product.size,
-          };
-        });
-
-        // Update in-memory state instantly without page refresh
-        setCart(merged);
-      } catch (err) {
-        console.warn('Cart reconciliation issue:', err);
       }
+
+      let mergedItems: CartItem[] = [];
+      if (guestItems.length > 0) {
+        mergedItems = await reconcileGuestCartWithRemote(userId, guestItems);
+        clearGuestCartStorage();
+      } else {
+        mergedItems = await fetchRemoteCart(userId);
+      }
+
+      setCart(mergedItems);
+      try {
+        localStorage.setItem(getCartStorageKey(userId), JSON.stringify(mergedItems));
+      } catch {}
+    } catch (err) {
+      console.warn('Failed to sync user cart:', err);
+    }
+  }, []);
+
+  // Handle auth transitions: Log In, Log Out, Account Switch
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const currentUserId = isAuthenticated && user?.id ? user.id : null;
+
+    // First time auth state resolves after mount
+    if (previousUserIdRef.current === undefined) {
+      previousUserIdRef.current = currentUserId;
+      if (currentUserId) {
+        syncUserCart(currentUserId, true);
+      }
+      return;
     }
 
-    reconcileGuestCart();
-  }, [isAuthenticated, user?.id]);
+    const prevUserId = previousUserIdRef.current;
+    previousUserIdRef.current = currentUserId;
 
-  // Save cart locally
+    // 1. LOGOUT: user was logged in, now logged out
+    if (prevUserId && !currentUserId) {
+      setCart([]);
+      setAppliedCoupon(null);
+      setCouponDiscount(0);
+      clearGuestCartStorage();
+      return;
+    }
+
+    // 2. ACCOUNT SWITCH: from User A directly to User B
+    if (prevUserId && currentUserId && prevUserId !== currentUserId) {
+      setCart([]);
+      setAppliedCoupon(null);
+      setCouponDiscount(0);
+      // Load User B's cart without merging User A's items
+      syncUserCart(currentUserId, false);
+      return;
+    }
+
+    // 3. GUEST LOGIN: from guest (null) to logged in (currentUserId)
+    if (!prevUserId && currentUserId) {
+      syncUserCart(currentUserId, true);
+      return;
+    }
+  }, [isAuthenticated, user?.id, isInitialized, syncUserCart]);
+
+  // Listen to explicit auth:logout event across all tabs / handlers
+  useEffect(() => {
+    const handleLogoutEvent = () => {
+      setCart([]);
+      setAppliedCoupon(null);
+      setCouponDiscount(0);
+      clearGuestCartStorage();
+    };
+
+    window.addEventListener('auth:logout', handleLogoutEvent);
+    return () => window.removeEventListener('auth:logout', handleLogoutEvent);
+  }, []);
+
+  // Save cart locally with user-scoped key
   useEffect(() => {
     if (!isInitialized) return;
     try {
-      localStorage.setItem('patanjali_cart', JSON.stringify(cart));
+      const currentUserId = isAuthenticated && user?.id ? user.id : null;
+      const key = getCartStorageKey(currentUserId);
+      localStorage.setItem(key, JSON.stringify(cart));
     } catch (e) {
       console.error('Failed to save cart to localStorage', e);
     }
-  }, [cart, isInitialized]);
+  }, [cart, isInitialized, isAuthenticated, user?.id]);
 
   // Recalculate coupon discount if cart changes
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
@@ -211,12 +192,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       } else {
         setAppliedCoupon(null);
         setCouponDiscount(0);
-        localStorage.removeItem('patanjali_coupon');
+        const currentUserId = isAuthenticated && user?.id ? user.id : null;
+        try {
+          localStorage.removeItem(getCouponStorageKey(currentUserId));
+        } catch {}
       }
     } else if (subtotal === 0) {
       setCouponDiscount(0);
     }
-  }, [subtotal, appliedCoupon, rawDeliveryFee]);
+  }, [subtotal, appliedCoupon, rawDeliveryFee, isAuthenticated, user?.id]);
 
   const total = Math.max(0, subtotal - couponDiscount + deliveryFee);
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -295,8 +279,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCart([]);
     setAppliedCoupon(null);
     setCouponDiscount(0);
-    localStorage.removeItem('patanjali_cart');
-    localStorage.removeItem('patanjali_coupon');
+
+    const currentUserId = isAuthenticated && user?.id ? user.id : null;
+    try {
+      localStorage.removeItem(getCartStorageKey(currentUserId));
+      localStorage.removeItem(getCouponStorageKey(currentUserId));
+      clearAllLegacyStorage();
+    } catch {}
 
     if (isAuthenticated && user?.id) {
       insforge.database.from('cart_items')
@@ -311,7 +300,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (result.isValid && result.coupon) {
       setAppliedCoupon(result.coupon);
       setCouponDiscount(result.discountAmount);
-      localStorage.setItem('patanjali_coupon', JSON.stringify({ coupon: result.coupon, discount: result.discountAmount }));
+      const currentUserId = isAuthenticated && user?.id ? user.id : null;
+      try {
+        localStorage.setItem(
+          getCouponStorageKey(currentUserId),
+          JSON.stringify({ coupon: result.coupon, discount: result.discountAmount })
+        );
+      } catch {}
       showToast(result.message, 'success');
       return { success: true, message: result.message };
     } else {
@@ -323,7 +318,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const removeCoupon = () => {
     setAppliedCoupon(null);
     setCouponDiscount(0);
-    localStorage.removeItem('patanjali_coupon');
+    const currentUserId = isAuthenticated && user?.id ? user.id : null;
+    try {
+      localStorage.removeItem(getCouponStorageKey(currentUserId));
+    } catch {}
     showToast('Coupon code removed.', 'info');
   };
 

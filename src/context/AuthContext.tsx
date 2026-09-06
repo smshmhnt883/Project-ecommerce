@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, Rea
 import { User } from '@/types';
 import { useToast } from './ToastContext';
 import { insforge } from '@/lib/insforge';
+import { clearGuestCartStorage, clearAllLegacyStorage } from '@/services/cart';
 
 interface AuthContextType {
   user: User | null;
@@ -390,7 +391,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.warn('InsForge sign-out error:', e);
     }
     setUser(null);
-    localStorage.removeItem('patanjali_user');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('patanjali_user');
+      clearGuestCartStorage();
+      clearAllLegacyStorage();
+      localStorage.removeItem('patanjali_wishlist_guest');
+      localStorage.removeItem('patanjali_wishlist');
+      window.dispatchEvent(new CustomEvent('auth:logout'));
+    }
     setIsLoading(false);
     showToast('You have been safely signed out.', 'info');
   };
