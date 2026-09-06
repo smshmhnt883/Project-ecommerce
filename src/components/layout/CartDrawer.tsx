@@ -52,8 +52,8 @@ export function CartDrawer() {
         onClick={closeCart}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-ayur-ivory shadow-drawer flex flex-col">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
+        <div className="w-full max-w-md bg-ayur-ivory shadow-drawer flex flex-col">
           {/* Header */}
           <div className="px-5 py-4 border-b border-ayur-border bg-white flex items-center justify-between">
             <div className="flex items-center gap-2">

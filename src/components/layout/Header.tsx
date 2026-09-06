@@ -57,30 +57,30 @@ export function Header({ onOpenSearch }: HeaderProps) {
   return (
     <header className="w-full z-40 sticky top-0 transition-all duration-300">
       {/* Top Announcement Bar */}
-      <div className="bg-ayur-green-900 text-ayur-ivory text-xs py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 border-b border-ayur-green-800">
-        <span>Authentic Ayurvedic & Natural Products • Free Pan-India Delivery on orders above ₹499</span>
-        <span className="hidden md:inline text-ayur-amber-400 font-semibold">• Use code WELCOME10 for 10% OFF</span>
+      <div className="w-full max-w-full bg-ayur-green-900 text-ayur-ivory text-[11px] sm:text-xs py-2 px-3 sm:px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 border-b border-ayur-green-800 box-border overflow-hidden">
+        <span className="truncate max-w-full">Authentic Ayurvedic & Natural Products • Free Pan-India Delivery on orders above ₹499</span>
+        <span className="hidden md:inline text-ayur-amber-400 font-semibold shrink-0">• Use code WELCOME10 for 10% OFF</span>
       </div>
 
       {/* Main Navigation Bar */}
       <div
-        className={`w-full transition-colors duration-200 ${
+        className={`w-full max-w-full transition-colors duration-200 box-border ${
           isScrolled
-            ? 'bg-ayur-ivory shadow-xs border-b border-ayur-border py-3'
-            : 'bg-ayur-ivory border-b border-ayur-border py-4'
+            ? 'bg-ayur-ivory shadow-xs border-b border-ayur-border py-2.5 sm:py-3'
+            : 'bg-ayur-ivory border-b border-ayur-border py-3 sm:py-4'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] box-border">
+          <div className="flex items-center justify-between gap-1 sm:gap-4 w-full">
             {/* Mobile Hamburger Button */}
-            <div className="flex items-center lg:hidden">
+            <div className="flex items-center lg:hidden shrink-0">
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-800 hover:text-ayur-green-900 transition-colors"
+                className="p-1.5 sm:p-2 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center text-ayur-charcoal-800 hover:text-ayur-green-900 transition-colors"
                 aria-label="Open Navigation Menu"
               >
-                <Menu className="w-6 h-6" />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
 
@@ -193,13 +193,13 @@ export function Header({ onOpenSearch }: HeaderProps) {
             </nav>
 
             {/* Center Brand Identity (Neutral Editorial Wordmark - No Fake Logo) */}
-            <div className="flex-1 lg:flex-initial text-center">
-              <Link href="/" className="inline-block group">
+            <div className="flex-1 lg:flex-initial text-center min-w-0 px-1 sm:px-2">
+              <Link href="/" className="inline-block group max-w-full">
                 <div className="flex flex-col items-center">
-                  <span className="font-serif tracking-[0.22em] text-lg sm:text-2xl font-normal text-ayur-green-950 uppercase group-hover:text-ayur-green-800 transition-colors">
+                  <span className="font-serif tracking-[0.10em] sm:tracking-[0.22em] text-sm sm:text-lg lg:text-2xl font-normal text-ayur-green-950 uppercase group-hover:text-ayur-green-800 transition-colors truncate max-w-full block">
                     Ayurveda & Botanicals
                   </span>
-                  <span className="text-[10px] tracking-[0.25em] text-ayur-charcoal-600 uppercase font-medium mt-0.5">
+                  <span className="text-[8px] sm:text-[10px] tracking-[0.12em] sm:tracking-[0.25em] text-ayur-charcoal-600 uppercase font-medium mt-0.5 truncate max-w-full block">
                     Authentic Patanjali Marketplace
                   </span>
                 </div>
@@ -207,21 +207,21 @@ export function Header({ onOpenSearch }: HeaderProps) {
             </div>
 
             {/* Right Action Icons */}
-            <div className="flex items-center gap-1 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
               {/* Search Modal Trigger */}
               <button
                 type="button"
                 onClick={onOpenSearch}
-                className="p-2.5 text-ayur-charcoal-800 hover:text-ayur-green-900 hover:bg-ayur-cream/60 rounded-full transition-colors relative"
+                className="p-2 sm:p-2.5 text-ayur-charcoal-800 hover:text-ayur-green-900 hover:bg-ayur-cream/60 rounded-full transition-colors relative shrink-0"
                 aria-label="Search Products"
               >
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Wishlist Link */}
+              {/* Wishlist Link - Hidden on mobile (<640px) as it is in bottom nav & account */}
               <Link
                 href="/account/wishlist"
-                className="p-2.5 text-ayur-charcoal-800 hover:text-ayur-green-900 hover:bg-ayur-cream/60 rounded-full transition-colors relative"
+                className="hidden sm:flex p-2.5 text-ayur-charcoal-800 hover:text-ayur-green-900 hover:bg-ayur-cream/60 rounded-full transition-colors relative shrink-0"
                 aria-label={`Wishlist with ${wishlistCount} items`}
               >
                 <Heart className="w-5 h-5" />
@@ -232,8 +232,8 @@ export function Header({ onOpenSearch }: HeaderProps) {
                 )}
               </Link>
 
-              {/* User Account Menu */}
-              <div className="relative">
+              {/* User Account Menu - Hidden on mobile (<640px) as it is in bottom nav & mobile menu */}
+              <div className="relative hidden sm:block shrink-0">
                 <button
                   type="button"
                   onClick={() => setAccountDropdown(!accountDropdown)}
@@ -338,13 +338,13 @@ export function Header({ onOpenSearch }: HeaderProps) {
               <button
                 type="button"
                 onClick={openCart}
-                className="flex items-center gap-2 p-2.5 sm:px-3.5 sm:py-2 bg-ayur-green-900 text-ayur-ivory hover:bg-ayur-green-800 rounded-full transition-colors relative"
+                className="flex items-center gap-1.5 p-2 sm:px-3.5 sm:py-2 bg-ayur-green-900 text-ayur-ivory hover:bg-ayur-green-800 rounded-full transition-colors relative shrink-0 shadow-xs"
                 aria-label={`Shopping bag with ${itemCount} items`}
               >
-                <ShoppingBag className="w-4 h-4 sm:w-4 sm:h-4" />
+                <ShoppingBag className="w-4 h-4" />
                 <span className="hidden sm:inline text-xs font-semibold tracking-wide">BAG</span>
                 {itemCount > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-ayur-amber-500 text-ayur-green-950 text-xs font-bold flex items-center justify-center ml-0.5">
+                  <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-ayur-amber-500 text-ayur-green-950 text-[10px] sm:text-xs font-bold flex items-center justify-center">
                     {itemCount}
                   </span>
                 )}

@@ -11,12 +11,12 @@ export function StoreLayout({ children }: { children: ReactNode }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-ayur-ivory text-ayur-charcoal-800">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden relative flex flex-col bg-ayur-ivory text-ayur-charcoal-800">
       {/* Sticky Header */}
       <Header onOpenSearch={() => setIsSearchOpen(true)} />
 
       {/* Main Content Area */}
-      <main className="flex-1 pb-20 lg:pb-0">
+      <main className="flex-1 pb-20 lg:pb-0 w-full max-w-full">
         {children}
       </main>
 
