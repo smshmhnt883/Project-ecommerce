@@ -127,18 +127,18 @@ export function ShippingStep({
         </label>
       </div>
 
-      <div className="pt-4 flex justify-between">
+      <div className="pt-4 flex flex-col-reverse sm:flex-row gap-3 justify-between">
         <button
           type="button"
           onClick={() => setCurrentStep(1)}
-          className="px-5 py-2.5 border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors"
+          className="w-full sm:w-auto px-5 py-3 min-h-[44px] border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors flex items-center justify-center"
         >
           Back to Address
         </button>
         <button
           type="button"
           onClick={() => setCurrentStep(3)}
-          className="px-8 py-3 bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors flex items-center gap-2 shadow-md"
+          className="w-full sm:w-auto px-8 py-3 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md"
         >
           <span>Continue to Order Summary</span>
           <ArrowRight className="w-4 h-4" />

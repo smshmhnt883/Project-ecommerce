@@ -65,7 +65,7 @@ export function CartDrawer() {
             <button
               type="button"
               onClick={closeCart}
-              className="p-1.5 text-ayur-charcoal-600 hover:text-ayur-charcoal-900 rounded-full hover:bg-ayur-cream"
+              className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-600 hover:text-ayur-charcoal-900 rounded-full hover:bg-ayur-cream"
               aria-label="Close cart drawer"
             >
               <X className="w-5 h-5" />
@@ -133,7 +133,7 @@ export function CartDrawer() {
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.product.id)}
-                        className="text-ayur-charcoal-400 hover:text-red-600 p-1"
+                        className="text-ayur-charcoal-400 hover:text-red-600 p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md"
                         aria-label="Remove item"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -157,22 +157,22 @@ export function CartDrawer() {
 
                     <div className="flex items-center justify-between mt-2.5">
                       {/* Stepper */}
-                      <div className="flex items-center border border-ayur-border rounded bg-white">
+                      <div className="flex items-center border border-ayur-border rounded-md bg-white overflow-hidden">
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                          className="p-1 hover:bg-ayur-cream text-ayur-charcoal-700"
+                          className="w-8 h-8 min-w-[32px] min-h-[32px] flex items-center justify-center hover:bg-ayur-cream text-ayur-charcoal-700 transition-colors"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="px-3 text-xs font-semibold text-ayur-charcoal-900">
+                        <span className="px-2.5 text-xs font-semibold text-ayur-charcoal-900 min-w-[24px] text-center">
                           {item.quantity}
                         </span>
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                          className="p-1 hover:bg-ayur-cream text-ayur-charcoal-700"
+                          className="w-8 h-8 min-w-[32px] min-h-[32px] flex items-center justify-center hover:bg-ayur-cream text-ayur-charcoal-700 transition-colors"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-3.5 h-3.5" />
@@ -185,7 +185,7 @@ export function CartDrawer() {
                         onClick={() => {
                           toggleWishlist(item.product);
                         }}
-                        className={`text-[11px] flex items-center gap-1 font-medium transition-colors ${
+                        className={`text-[11px] min-h-[36px] flex items-center gap-1 font-medium transition-colors p-1 ${
                           isInWishlist(item.product.id)
                             ? 'text-ayur-terracotta-600'
                             : 'text-ayur-charcoal-600 hover:text-ayur-green-900'
@@ -203,7 +203,7 @@ export function CartDrawer() {
 
           {/* Cart Footer */}
           {cart.length > 0 && (
-            <div className="p-5 border-t border-ayur-border bg-white space-y-4">
+            <div className="p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] border-t border-ayur-border bg-white space-y-4">
               {/* Coupon Bar */}
               <div className="bg-ayur-ivory p-3 rounded-lg border border-ayur-border">
                 {appliedCoupon ? (
@@ -215,7 +215,7 @@ export function CartDrawer() {
                     <button
                       type="button"
                       onClick={removeCoupon}
-                      className="text-xs text-red-600 font-medium hover:underline"
+                      className="text-xs text-red-600 font-medium hover:underline p-1 min-h-[36px] flex items-center"
                     >
                       Remove
                     </button>
@@ -231,11 +231,11 @@ export function CartDrawer() {
                           setCouponError('');
                         }}
                         placeholder="Coupon (e.g. WELCOME10)"
-                        className="flex-1 bg-white border border-ayur-border rounded px-2.5 py-1.5 text-xs uppercase focus:outline-none focus:border-ayur-green-800"
+                        className="flex-1 bg-white border border-ayur-border rounded-md px-3 py-2 text-base sm:text-xs uppercase focus:outline-none focus:border-ayur-green-800 min-h-[44px]"
                       />
                       <button
                         type="submit"
-                        className="px-3 py-1.5 bg-ayur-green-900 text-white text-xs font-semibold rounded hover:bg-ayur-green-800"
+                        className="px-4 py-2 min-h-[44px] bg-ayur-green-900 text-white text-xs font-semibold rounded-md hover:bg-ayur-green-800 flex items-center justify-center transition-colors"
                       >
                         Apply
                       </button>
@@ -280,14 +280,14 @@ export function CartDrawer() {
                 <Link
                   href="/cart"
                   onClick={closeCart}
-                  className="w-full text-center py-2.5 border border-ayur-green-900 text-ayur-green-900 rounded font-medium text-xs tracking-wider uppercase hover:bg-ayur-cream transition-colors"
+                  className="w-full min-h-[44px] text-center py-2.5 px-3 border border-ayur-green-900 text-ayur-green-900 rounded-md font-medium text-xs tracking-wider uppercase hover:bg-ayur-cream transition-colors flex items-center justify-center"
                 >
                   View Bag
                 </Link>
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="w-full text-center py-2.5 bg-ayur-green-900 text-white rounded font-medium text-xs tracking-wider uppercase hover:bg-ayur-green-800 transition-colors flex items-center justify-center gap-1"
+                  className="w-full min-h-[44px] text-center py-2.5 px-3 bg-ayur-green-900 text-white rounded-md font-medium text-xs tracking-wider uppercase hover:bg-ayur-green-800 transition-colors flex items-center justify-center gap-1.5"
                 >
                   <span>Checkout</span>
                   <ArrowRight className="w-3.5 h-3.5" />

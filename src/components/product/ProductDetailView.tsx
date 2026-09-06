@@ -171,6 +171,43 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
           </section>
         )}
       </div>
+
+      {/* Sticky Mobile Add to Cart Bar */}
+      <div className="lg:hidden fixed bottom-[58px] left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-ayur-border px-4 py-2.5 shadow-lg flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <img
+            src={product.thumbnail || product.images[0]}
+            alt=""
+            className="w-10 h-10 rounded border border-ayur-border object-contain bg-[#FAF8F5] shrink-0"
+          />
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-ayur-charcoal-900 truncate">
+              {product.name}
+            </p>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xs font-bold text-ayur-green-950">₹{product.price}</span>
+              {product.mrp > product.price && (
+                <span className="text-[10px] text-ayur-charcoal-400 line-through">₹{product.mrp}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddToCart}
+          disabled={!product.inStock || isAdding}
+          className="px-5 py-2.5 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors shrink-0 flex items-center justify-center gap-1.5 shadow-sm"
+        >
+          {isAdding ? (
+            <span>Added</span>
+          ) : !product.inStock ? (
+            <span>Out of Stock</span>
+          ) : (
+            <span>Add to Bag</span>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

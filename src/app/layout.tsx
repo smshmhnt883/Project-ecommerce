@@ -1,7 +1,15 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Providers } from '@/context/Providers';
 import { StoreLayout } from '@/components/layout/StoreLayout';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+  themeColor: '#172D20',
+};
 
 export const metadata: Metadata = {
   title: 'Ayurveda & Botanicals | Authentic Patanjali Marketplace',

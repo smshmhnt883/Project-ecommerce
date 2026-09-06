@@ -77,7 +77,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2 text-ayur-charcoal-800 hover:text-ayur-green-900 transition-colors"
+                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-800 hover:text-ayur-green-900 transition-colors"
                 aria-label="Open Navigation Menu"
               >
                 <Menu className="w-6 h-6" />
@@ -361,7 +361,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
             className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative w-4/5 max-w-sm bg-ayur-ivory h-full shadow-2xl flex flex-col z-10 overflow-y-auto">
+          <div className="relative w-4/5 max-w-sm bg-ayur-ivory h-full shadow-2xl flex flex-col z-10 overflow-y-auto touch-pan-y overscroll-contain">
             <div className="p-4 border-b border-ayur-border flex items-center justify-between">
               <div>
                 <div className="font-serif text-lg tracking-wider text-ayur-green-950 uppercase">
@@ -372,8 +372,9 @@ export function Header({ onOpenSearch }: HeaderProps) {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 text-ayur-charcoal-600 hover:text-ayur-charcoal-900"
+                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-600 hover:text-ayur-charcoal-900 rounded-md"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />
@@ -453,7 +454,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
             </div>
 
             {/* Mobile Footer Auth */}
-            <div className="p-4 border-t border-ayur-border bg-ayur-cream/50">
+            <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-ayur-border bg-ayur-cream/50">
               {isAuthenticated && user ? (
                 <div className="space-y-2">
                   <div className="text-sm font-medium text-ayur-charcoal-900">

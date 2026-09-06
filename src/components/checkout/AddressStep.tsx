@@ -203,7 +203,7 @@ export function AddressStep({
                 type="button"
                 onClick={() => setCurrentStep(2)}
                 disabled={!selectedAddressId}
-                className="px-8 py-3 bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors flex items-center gap-2 shadow-md"
+                className="w-full sm:w-auto px-8 py-3.5 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md"
               >
                 <span>Continue to Delivery Options</span>
                 <ArrowRight className="w-4 h-4" />
@@ -221,7 +221,7 @@ export function AddressStep({
               <button
                 type="button"
                 onClick={() => setShowNewAddressForm(false)}
-                className="text-xs text-ayur-charcoal-500 hover:text-ayur-charcoal-800 underline"
+                className="text-xs text-ayur-charcoal-500 hover:text-ayur-charcoal-800 underline p-1 min-h-[44px] flex items-center"
               >
                 Cancel
               </button>
@@ -243,10 +243,11 @@ export function AddressStep({
               <input
                 type="text"
                 required
+                autoComplete="name"
                 value={newAddrFullName}
                 onChange={(e) => setNewAddrFullName(e.target.value)}
                 placeholder="e.g. Ramesh Chandra"
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               />
             </div>
             <div>
@@ -254,17 +255,19 @@ export function AddressStep({
                 10-Digit Mobile Number *
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-2.5 bg-ayur-cream border border-r-0 border-ayur-border rounded-l-md text-ayur-charcoal-600 text-xs">
+                <span className="inline-flex items-center px-3 min-h-[44px] bg-ayur-cream border border-r-0 border-ayur-border rounded-l-md text-ayur-charcoal-600 text-xs">
                   +91
                 </span>
                 <input
                   type="tel"
                   required
                   maxLength={10}
+                  inputMode="tel"
+                  autoComplete="tel"
                   value={newAddrPhone}
                   onChange={(e) => setNewAddrPhone(e.target.value.replace(/\D/g, ''))}
                   placeholder="9876543210"
-                  className="flex-1 px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-r-md focus:outline-none focus:border-ayur-green-800"
+                  className="flex-1 px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-r-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
                 />
               </div>
             </div>
@@ -275,10 +278,11 @@ export function AddressStep({
               <input
                 type="text"
                 required
+                autoComplete="address-line1"
                 value={newAddrLine1}
                 onChange={(e) => setNewAddrLine1(e.target.value)}
                 placeholder="e.g. Flat 402, Lotus Residency"
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               />
             </div>
             <div>
@@ -287,10 +291,11 @@ export function AddressStep({
               </label>
               <input
                 type="text"
+                autoComplete="address-line2"
                 value={newAddrLine2}
                 onChange={(e) => setNewAddrLine2(e.target.value)}
                 placeholder="e.g. 12th Main Road, Indiranagar"
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               />
             </div>
             <div>
@@ -301,10 +306,13 @@ export function AddressStep({
                 type="text"
                 required
                 maxLength={6}
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="postal-code"
                 value={newAddrPincode}
                 onChange={(e) => handlePincodeChange(e.target.value)}
                 placeholder="e.g. 560034"
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               />
             </div>
             <div>
@@ -314,10 +322,11 @@ export function AddressStep({
               <input
                 type="text"
                 required
+                autoComplete="address-level2"
                 value={newAddrCity}
                 onChange={(e) => setNewAddrCity(e.target.value)}
                 placeholder="e.g. Bengaluru"
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               />
             </div>
             <div>
@@ -326,9 +335,10 @@ export function AddressStep({
               </label>
               <select
                 required
+                autoComplete="address-level1"
                 value={newAddrState}
                 onChange={(e) => setNewAddrState(e.target.value)}
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               >
                 <option value="">-- Select State / UT --</option>
                 {INDIAN_STATES.map((st) => (
@@ -347,17 +357,17 @@ export function AddressStep({
                 value={newAddrLandmark}
                 onChange={(e) => setNewAddrLandmark(e.target.value)}
                 placeholder="e.g. Near BDA Complex"
-                className="w-full px-3 py-2 bg-ayur-ivory border border-ayur-border rounded-md focus:outline-none focus:border-ayur-green-800"
+                className="w-full px-3 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-md text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
               />
             </div>
           </div>
 
-          <div className="pt-2 flex gap-3">
+          <div className="pt-2 flex flex-col-reverse sm:flex-row gap-3">
             {addresses.length > 0 && (
               <button
                 type="button"
                 onClick={() => setShowNewAddressForm(false)}
-                className="px-5 py-2.5 border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors"
+                className="w-full sm:w-auto px-5 py-3 min-h-[44px] border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors text-center"
               >
                 Cancel
               </button>
@@ -365,7 +375,7 @@ export function AddressStep({
             <button
               type="submit"
               disabled={isSavingAddress}
-              className="px-6 py-2.5 bg-ayur-green-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider hover:bg-ayur-green-800 transition-colors shadow-sm disabled:opacity-50"
+              className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-ayur-green-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider hover:bg-ayur-green-800 transition-colors shadow-sm disabled:opacity-50 flex items-center justify-center"
             >
               {isSavingAddress ? 'Saving Address...' : 'Save Address & Use'}
             </button>

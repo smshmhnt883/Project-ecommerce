@@ -95,10 +95,11 @@ function LoginForm() {
             <input
               type="text"
               required
+              autoComplete="username"
               value={emailOrPhone}
               onChange={(e) => setEmailOrPhone(e.target.value)}
               placeholder="e.g. yourname@example.com"
-              className="w-full pl-3 pr-10 py-2.5 bg-ayur-ivory border border-ayur-border rounded-lg focus:outline-none focus:border-ayur-green-800 text-xs"
+              className="w-full pl-3.5 pr-10 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-lg focus:outline-none focus:border-ayur-green-800 text-base sm:text-xs"
             />
             <Mail className="w-4 h-4 text-ayur-charcoal-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
@@ -111,7 +112,7 @@ function LoginForm() {
             </label>
             <Link
               href="/forgot-password"
-              className="text-[11px] text-ayur-green-800 font-medium hover:underline"
+              className="text-[11px] text-ayur-green-800 font-medium hover:underline p-1"
             >
               Forgot password?
             </Link>
@@ -120,15 +121,16 @@ function LoginForm() {
             <input
               type={showPassword ? 'text' : 'password'}
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full pl-3 pr-10 py-2.5 bg-ayur-ivory border border-ayur-border rounded-lg focus:outline-none focus:border-ayur-green-800 text-xs"
+              className="w-full pl-3.5 pr-10 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-lg focus:outline-none focus:border-ayur-green-800 text-base sm:text-xs"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="p-1 text-ayur-charcoal-400 hover:text-ayur-charcoal-700 absolute right-2.5 top-1/2 -translate-y-1/2"
+              className="w-10 h-10 flex items-center justify-center text-ayur-charcoal-400 hover:text-ayur-charcoal-700 absolute right-1 top-1/2 -translate-y-1/2"
               aria-label="Toggle password visibility"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -136,13 +138,13 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center py-1">
           <input
             type="checkbox"
             id="remember-me"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
-            className="rounded text-ayur-green-900 accent-ayur-green-900 w-3.5 h-3.5"
+            className="rounded text-ayur-green-900 accent-ayur-green-900 w-4 h-4"
           />
           <label htmlFor="remember-me" className="ml-2 text-xs text-ayur-charcoal-700 cursor-pointer">
             Remember my session on this device
@@ -152,7 +154,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md"
+          className="w-full py-3.5 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md"
         >
           {isLoading ? (
             <span>Authenticating...</span>

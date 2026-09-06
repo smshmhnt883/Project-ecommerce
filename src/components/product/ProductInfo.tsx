@@ -107,13 +107,13 @@ export function ProductInfo({
           <span className="text-xs font-semibold text-ayur-charcoal-900 block">
             Select Pack Size:
           </span>
-          <div className="flex gap-2.5">
+          <div className="flex flex-wrap gap-2.5">
             {product.availableSizes.map((size) => (
               <button
                 key={size}
                 type="button"
                 onClick={() => setSelectedSize(size)}
-                className={`px-4 py-2 rounded-lg text-xs font-medium border transition-colors ${
+                className={`px-4 py-2.5 min-h-[44px] rounded-lg text-xs font-medium border transition-colors flex items-center justify-center ${
                   selectedSize === size
                     ? 'border-ayur-green-900 bg-ayur-green-900 text-white shadow-xs'
                     : 'border-ayur-border text-ayur-charcoal-800 bg-white hover:bg-ayur-cream'
@@ -128,24 +128,24 @@ export function ProductInfo({
 
       {/* Quantity Stepper & Add to Bag / Buy Now */}
       <div className="space-y-3 pt-2">
-        <div className="flex gap-3">
+        <div className="flex gap-2.5 sm:gap-3">
           {/* Quantity */}
-          <div className="flex items-center border border-ayur-border rounded-lg bg-white px-2">
+          <div className="flex items-center border border-ayur-border rounded-lg bg-white overflow-hidden">
             <button
               type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="p-2 text-ayur-charcoal-600 hover:text-ayur-charcoal-900"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-700 hover:bg-ayur-cream text-lg font-medium transition-colors"
               aria-label="Decrease quantity"
             >
               -
             </button>
-            <span className="px-3 text-xs font-bold text-ayur-charcoal-900">
+            <span className="px-2 sm:px-3 text-xs font-bold text-ayur-charcoal-900 min-w-[28px] text-center">
               {quantity}
             </span>
             <button
               type="button"
               onClick={() => setQuantity(quantity + 1)}
-              className="p-2 text-ayur-charcoal-600 hover:text-ayur-charcoal-900"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-700 hover:bg-ayur-cream text-lg font-medium transition-colors"
               aria-label="Increase quantity"
             >
               +
@@ -157,7 +157,7 @@ export function ProductInfo({
             type="button"
             onClick={onAddToCart}
             disabled={!product.inStock || isAdding}
-            className="flex-1 py-3.5 bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2"
+            className="flex-1 py-3.5 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2"
           >
             {isAdding ? (
               <>
@@ -176,7 +176,7 @@ export function ProductInfo({
           <button
             type="button"
             onClick={onAddToWishlist}
-            className={`p-3.5 rounded-lg border transition-all ${
+            className={`w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg border transition-all ${
               isInWishlist
                 ? 'border-ayur-terracotta-500 bg-ayur-terracotta-50 text-ayur-terracotta-600'
                 : 'border-ayur-border bg-white text-ayur-charcoal-600 hover:text-ayur-green-900'
@@ -192,7 +192,7 @@ export function ProductInfo({
           type="button"
           onClick={onBuyNow}
           disabled={!product.inStock}
-          className="w-full py-3.5 bg-ayur-cream hover:bg-ayur-sand/80 text-ayur-green-950 border border-ayur-border font-semibold text-xs tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3.5 min-h-[44px] bg-ayur-cream hover:bg-ayur-sand/80 text-ayur-green-950 border border-ayur-border font-semibold text-xs tracking-wider uppercase rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <span>BUY IT NOW (INSTANT CHECKOUT)</span>
           <ArrowRight className="w-4 h-4" />

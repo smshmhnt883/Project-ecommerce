@@ -16,7 +16,7 @@ export function StoreLayout({ children }: { children: ReactNode }) {
       <Header onOpenSearch={() => setIsSearchOpen(true)} />
 
       {/* Main Content Area */}
-      <main className="flex-1 pb-16 lg:pb-0">
+      <main className="flex-1 pb-20 lg:pb-0">
         {children}
       </main>
 
@@ -33,7 +33,7 @@ export function StoreLayout({ children }: { children: ReactNode }) {
       />
 
       {/* Bottom Sticky Navigation on Mobile */}
-      <MobileNav />
+      <MobileNav onOpenSearch={() => setIsSearchOpen(true)} />
     </div>
   );
 }

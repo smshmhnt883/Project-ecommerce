@@ -24,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
-          className={`w-full px-3.5 py-2.5 bg-white border rounded-lg text-sm text-ayur-charcoal-900 placeholder:text-ayur-charcoal-400 focus:outline-none focus:ring-2 transition-colors ${
+          className={`w-full px-3.5 py-2.5 min-h-[44px] bg-white border rounded-lg text-base sm:text-sm text-ayur-charcoal-900 placeholder:text-ayur-charcoal-400 focus:outline-none focus:ring-2 transition-colors ${
             error
               ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-200'
               : 'border-ayur-border focus:border-ayur-green-800 focus:ring-ayur-green-100'

@@ -56,14 +56,14 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
         <button
           type="button"
           onClick={handleWishlistToggle}
-          className={`absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-md border flex items-center justify-center transition-colors ${
+          className={`absolute top-2 right-2 z-10 w-9 h-9 min-w-[36px] min-h-[36px] rounded-md border flex items-center justify-center transition-colors shadow-xs ${
             isSaved
               ? 'bg-red-50 border-red-200 text-red-600'
               : 'bg-white/95 border-ayur-border text-ayur-charcoal-600 hover:text-ayur-green-900 hover:border-ayur-charcoal-400'
           }`}
           aria-label={isSaved ? 'Remove from wishlist' : 'Save to wishlist'}
         >
-          <Heart className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
+          <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
         </button>
 
         {/* Quick View Button */}
@@ -136,7 +136,7 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
           type="button"
           onClick={handleAddToCart}
           disabled={!product.inStock || isAdding}
-          className={`w-full py-2 px-3 rounded-md text-xs font-medium tracking-wider uppercase transition-colors flex items-center justify-center gap-1.5 ${
+          className={`w-full min-h-[44px] py-2.5 px-3 rounded-md text-xs font-medium tracking-wider uppercase transition-colors flex items-center justify-center gap-1.5 ${
             !product.inStock
               ? 'bg-ayur-charcoal-100 text-ayur-charcoal-400 cursor-not-allowed border border-ayur-border'
               : isAdding

@@ -87,13 +87,13 @@ export function OrderReviewPanel({
                 value={couponCodeInput}
                 onChange={(e) => setCouponCodeInput(e.target.value)}
                 placeholder="e.g. WELCOME10"
-                className="flex-1 px-3 py-2 text-xs bg-white border border-ayur-border rounded-md uppercase font-mono tracking-wider focus:outline-none focus:border-ayur-green-800"
+                className="flex-1 px-3 py-2.5 min-h-[44px] text-base sm:text-xs bg-white border border-ayur-border rounded-md uppercase font-mono tracking-wider focus:outline-none focus:border-ayur-green-800"
               />
               <button
                 type="button"
                 onClick={() => handleApplyCoupon(couponCodeInput)}
                 disabled={isApplyingCoupon || !couponCodeInput.trim()}
-                className="px-5 py-2 bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-md text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm"
+                className="px-5 py-2.5 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-md text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center"
               >
                 Apply
               </button>
@@ -171,18 +171,18 @@ export function OrderReviewPanel({
         </div>
       </div>
 
-      <div className="pt-4 flex justify-between">
+      <div className="pt-4 flex flex-col-reverse sm:flex-row gap-3 justify-between">
         <button
           type="button"
           onClick={() => setCurrentStep(2)}
-          className="px-5 py-2.5 border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors"
+          className="w-full sm:w-auto px-5 py-3 min-h-[44px] border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors flex items-center justify-center"
         >
           Back to Delivery
         </button>
         <button
           type="button"
           onClick={() => setCurrentStep(4)}
-          className="px-8 py-3 bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors flex items-center gap-2 shadow-md"
+          className="w-full sm:w-auto px-8 py-3 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg text-xs font-semibold tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md"
         >
           <span>Proceed to Payment</span>
           <ArrowRight className="w-4 h-4" />

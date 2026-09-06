@@ -134,13 +134,13 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               }
             }}
             placeholder="Search for Dant Kanti, Aloe Vera, Cow Ghee, Kesh Kanti..."
-            className="w-full bg-transparent text-base sm:text-lg text-ayur-charcoal-900 placeholder-ayur-charcoal-400 focus:outline-none"
+            className="w-full bg-transparent text-base sm:text-lg text-ayur-charcoal-900 placeholder-ayur-charcoal-400 focus:outline-none min-h-[44px]"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery('')}
-              className="p-1 text-ayur-charcoal-400 hover:text-ayur-charcoal-800"
+              className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center text-ayur-charcoal-400 hover:text-ayur-charcoal-800"
               aria-label="Clear input"
             >
               <X className="w-4 h-4" />
@@ -149,9 +149,11 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           <button
             type="button"
             onClick={onClose}
-            className="text-xs font-semibold text-ayur-charcoal-600 hover:text-ayur-charcoal-900 px-2 py-1 rounded hover:bg-ayur-cream uppercase tracking-wider"
+            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-xs font-semibold text-ayur-charcoal-600 hover:text-ayur-charcoal-900 rounded-md hover:bg-ayur-cream uppercase tracking-wider transition-colors"
+            aria-label="Close search"
           >
-            ESC
+            <span className="hidden sm:inline">ESC</span>
+            <X className="w-5 h-5 sm:hidden" />
           </button>
         </div>
 

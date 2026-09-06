@@ -167,11 +167,11 @@ export function PaymentStep({
         </div>
       </div>
 
-      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between items-center gap-3">
         <button
           type="button"
           onClick={() => setCurrentStep(3)}
-          className="w-full sm:w-auto px-5 py-2.5 border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors text-center"
+          className="w-full sm:w-auto px-5 py-3 min-h-[44px] border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-700 hover:bg-ayur-cream transition-colors flex items-center justify-center"
         >
           Back to Review
         </button>
@@ -179,7 +179,7 @@ export function PaymentStep({
           type="button"
           onClick={onCompleteOrder}
           disabled={isProcessingOrder}
-          className="w-full sm:w-auto px-10 py-4 bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-lg text-xs font-bold tracking-widest uppercase transition-all shadow-lg flex items-center justify-center gap-2"
+          className="w-full sm:w-auto px-8 py-4 min-h-[48px] bg-ayur-green-900 hover:bg-ayur-green-800 disabled:opacity-50 text-white rounded-lg text-xs font-bold tracking-widest uppercase transition-all shadow-lg flex items-center justify-center gap-2 text-center"
         >
           {isProcessingOrder ? (
             paymentMethod === 'online' ? (
@@ -189,7 +189,7 @@ export function PaymentStep({
             )
           ) : (
             <>
-              <Lock className="w-4 h-4" />
+              <Lock className="w-4 h-4 shrink-0" />
               <span>
                 {paymentMethod === 'online'
                   ? `PAY VIA RAZORPAY (₹${grandTotal})`

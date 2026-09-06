@@ -116,10 +116,11 @@ function RegisterForm() {
           <input
             type="text"
             required
+            autoComplete="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Ramesh Chandra"
-            className="w-full px-3 py-2.5 bg-ayur-ivory border border-ayur-border rounded-lg text-xs focus:outline-none focus:border-ayur-green-800"
+            className="w-full px-3.5 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-lg text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
           />
         </div>
 
@@ -130,10 +131,11 @@ function RegisterForm() {
           <input
             type="email"
             required
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="e.g. ramesh.chandra@example.com"
-            className="w-full px-3 py-2.5 bg-ayur-ivory border border-ayur-border rounded-lg text-xs focus:outline-none focus:border-ayur-green-800"
+            className="w-full px-3.5 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-lg text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
           />
         </div>
 
@@ -142,17 +144,19 @@ function RegisterForm() {
             Mobile Number (10 Digits) *
           </label>
           <div className="flex">
-            <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-ayur-border bg-ayur-cream text-ayur-charcoal-600 text-xs">
+            <span className="inline-flex items-center px-3 min-h-[44px] rounded-l-lg border border-r-0 border-ayur-border bg-ayur-cream text-ayur-charcoal-600 text-xs">
               +91
             </span>
             <input
               type="tel"
               required
               maxLength={10}
+              inputMode="tel"
+              autoComplete="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
               placeholder="9876543210"
-              className="w-full px-3 py-2.5 bg-ayur-ivory border border-ayur-border rounded-r-lg text-xs focus:outline-none focus:border-ayur-green-800"
+              className="w-full px-3.5 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-r-lg text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
             />
           </div>
         </div>
@@ -165,15 +169,16 @@ function RegisterForm() {
             <input
               type={showPassword ? 'text' : 'password'}
               required
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full pl-3 pr-10 py-2.5 bg-ayur-ivory border border-ayur-border rounded-lg text-xs focus:outline-none focus:border-ayur-green-800"
+              className="w-full pl-3.5 pr-10 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-lg text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="p-1 text-ayur-charcoal-400 hover:text-ayur-charcoal-700 absolute right-2.5 top-1/2 -translate-y-1/2"
+              className="w-10 h-10 flex items-center justify-center text-ayur-charcoal-400 hover:text-ayur-charcoal-700 absolute right-1 top-1/2 -translate-y-1/2"
               aria-label="Toggle password visibility"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -188,10 +193,11 @@ function RegisterForm() {
           <input
             type="password"
             required
+            autoComplete="new-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-3 py-2.5 bg-ayur-ivory border border-ayur-border rounded-lg text-xs focus:outline-none focus:border-ayur-green-800"
+            className="w-full px-3.5 py-2.5 min-h-[44px] bg-ayur-ivory border border-ayur-border rounded-lg text-base sm:text-xs focus:outline-none focus:border-ayur-green-800"
           />
         </div>
 
@@ -201,9 +207,9 @@ function RegisterForm() {
             id="agree-terms"
             checked={agreeTerms}
             onChange={(e) => setAgreeTerms(e.target.checked)}
-            className="rounded text-ayur-green-900 accent-ayur-green-900 w-3.5 h-3.5 mt-0.5"
+            className="rounded text-ayur-green-900 accent-ayur-green-900 w-4 h-4 mt-0.5"
           />
-          <label htmlFor="agree-terms" className="ml-2 text-[11px] text-ayur-charcoal-600 leading-tight">
+          <label htmlFor="agree-terms" className="ml-2 text-xs text-ayur-charcoal-600 leading-normal">
             I agree to the Patanjali store Terms of Service and Privacy Policy.
           </label>
         </div>
@@ -211,7 +217,7 @@ function RegisterForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md mt-2"
+          className="w-full py-3.5 min-h-[44px] bg-ayur-green-900 hover:bg-ayur-green-800 text-white rounded-lg font-semibold text-xs tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-md mt-2"
         >
           {isLoading ? (
             <span>Creating Account...</span>

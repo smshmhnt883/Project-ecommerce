@@ -314,9 +314,9 @@ export function ShopCatalog({
             <button
               type="button"
               onClick={() => setMobileFiltersOpen(true)}
-              className="lg:hidden flex items-center gap-2 px-3.5 py-2 bg-white border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-800 shadow-soft"
+              className="lg:hidden flex items-center gap-2 px-3.5 py-2.5 min-h-[44px] bg-white border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-800 shadow-soft"
             >
-              <Filter className="w-3.5 h-3.5" />
+              <Filter className="w-4 h-4" />
               <span>Filters ({activeFilterCount})</span>
             </button>
 
@@ -335,7 +335,7 @@ export function ShopCatalog({
                 id="sort-select"
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value as SortOption)}
-                className="appearance-none bg-white border border-ayur-border rounded-lg px-3.5 py-2 pr-8 text-xs font-medium text-ayur-charcoal-900 shadow-soft focus:outline-none focus:border-ayur-green-800"
+                className="appearance-none bg-white border border-ayur-border rounded-lg px-3.5 py-2.5 min-h-[44px] pr-8 text-base sm:text-xs font-medium text-ayur-charcoal-900 shadow-soft focus:outline-none focus:border-ayur-green-800"
               >
                 <option value="recommended">Recommended</option>
                 <option value="bestseller">Popular Bestsellers</option>
@@ -396,13 +396,14 @@ export function ShopCatalog({
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
-                className="p-1 text-ayur-charcoal-600 hover:text-ayur-charcoal-900"
+                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ayur-charcoal-600 hover:text-ayur-charcoal-900 rounded-md"
+                aria-label="Close filters"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-5 space-y-6 flex-1">
+            <div className="p-5 space-y-6 flex-1 touch-pan-y overscroll-contain overflow-y-auto">
               {/* Category */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-ayur-charcoal-800 mb-2">
@@ -415,8 +416,8 @@ export function ShopCatalog({
                       handleCategorySelect(null);
                       setMobileFiltersOpen(false);
                     }}
-                    className={`w-full text-left text-xs p-2 rounded ${
-                      selectedCategory === null ? 'bg-ayur-green-900 text-white' : 'text-ayur-charcoal-700'
+                    className={`w-full text-left text-xs px-3 py-2.5 min-h-[44px] flex items-center rounded-md font-medium transition-colors ${
+                      selectedCategory === null ? 'bg-ayur-green-900 text-white' : 'text-ayur-charcoal-700 hover:bg-ayur-cream'
                     }`}
                   >
                     All Categories
@@ -429,8 +430,8 @@ export function ShopCatalog({
                         handleCategorySelect(cat.slug);
                         setMobileFiltersOpen(false);
                       }}
-                      className={`w-full text-left text-xs p-2 rounded ${
-                        selectedCategory === cat.slug ? 'bg-ayur-green-900 text-white' : 'text-ayur-charcoal-700'
+                      className={`w-full text-left text-xs px-3 py-2.5 min-h-[44px] flex items-center rounded-md font-medium transition-colors ${
+                        selectedCategory === cat.slug ? 'bg-ayur-green-900 text-white' : 'text-ayur-charcoal-700 hover:bg-ayur-cream'
                       }`}
                     >
                       {cat.name}
@@ -454,36 +455,36 @@ export function ShopCatalog({
                   step={25}
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="w-full accent-ayur-green-900"
+                  className="w-full accent-ayur-green-900 h-6 cursor-pointer"
                 />
               </div>
 
               {/* In Stock */}
               <div className="pt-4 border-t border-ayur-border">
-                <label className="flex items-center gap-2 text-xs text-ayur-charcoal-800">
+                <label className="flex items-center gap-2.5 text-xs text-ayur-charcoal-800 cursor-pointer min-h-[44px]">
                   <input
                     type="checkbox"
                     checked={inStockOnly}
                     onChange={(e) => setInStockOnly(e.target.checked)}
-                    className="w-4 h-4 rounded text-ayur-green-900"
+                    className="w-4 h-4 rounded text-ayur-green-900 accent-ayur-green-900"
                   />
-                  <span>In Stock Only</span>
+                  <span className="font-medium">In Stock Only</span>
                 </label>
               </div>
             </div>
 
-            <div className="p-4 border-t border-ayur-border bg-ayur-ivory flex gap-3">
+            <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-ayur-border bg-ayur-ivory flex gap-3">
               <button
                 type="button"
                 onClick={resetAllFilters}
-                className="flex-1 py-2.5 border border-ayur-border rounded-lg text-xs font-medium text-ayur-charcoal-800"
+                className="flex-1 py-2.5 min-h-[44px] border border-ayur-border rounded-lg text-xs font-semibold text-ayur-charcoal-800 hover:bg-ayur-cream transition-colors flex items-center justify-center"
               >
                 Reset
               </button>
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
-                className="flex-1 py-2.5 bg-ayur-green-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider"
+                className="flex-1 py-2.5 min-h-[44px] bg-ayur-green-900 text-white rounded-lg text-xs font-semibold uppercase tracking-wider hover:bg-ayur-green-800 transition-colors flex items-center justify-center"
               >
                 Show {filteredProducts.length} Items
               </button>
