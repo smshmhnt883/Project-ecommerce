@@ -361,8 +361,8 @@ export function Header({ onOpenSearch }: HeaderProps) {
             className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative w-4/5 max-w-sm bg-ayur-ivory h-full shadow-2xl flex flex-col z-10 overflow-y-auto touch-pan-y overscroll-contain">
-            <div className="p-4 border-b border-ayur-border flex items-center justify-between">
+          <div className="relative w-4/5 max-w-sm bg-ayur-ivory h-[100dvh] shadow-2xl flex flex-col z-10 overflow-y-auto touch-pan-y overscroll-contain">
+            <div className="p-4 border-b border-ayur-border flex items-center justify-between shrink-0 bg-ayur-ivory sticky top-0 z-20">
               <div>
                 <div className="font-serif text-lg tracking-wider text-ayur-green-950 uppercase">
                   Ayurveda & Botanicals
@@ -381,7 +381,66 @@ export function Header({ onOpenSearch }: HeaderProps) {
               </button>
             </div>
 
-            <div className="p-4 space-y-4 flex-1">
+            <div className="p-4 space-y-4 flex-1 pb-[max(8rem,calc(5rem+env(safe-area-inset-bottom)))]">
+              {/* Prominent Auth Block at Top */}
+              <div className="p-3.5 bg-ayur-cream/80 border border-ayur-border rounded-xl shadow-xs">
+                {isAuthenticated && user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-ayur-green-900 text-white flex items-center justify-center font-serif text-base font-semibold shrink-0">
+                        {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs text-ayur-charcoal-600 font-medium">Welcome back,</div>
+                        <div className="text-sm font-semibold text-ayur-charcoal-900 truncate">
+                          {user.name}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 pt-1 border-t border-ayur-border/60">
+                      <Link
+                        href="/account"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex-1 text-center py-2 px-3 text-xs font-medium bg-ayur-green-900 text-white rounded-lg hover:bg-ayur-green-950 transition-colors"
+                      >
+                        My Account
+                      </Link>
+                      <Link
+                        href="/account/orders"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex-1 text-center py-2 px-3 text-xs font-medium bg-white border border-ayur-border text-ayur-charcoal-800 rounded-lg hover:bg-ayur-cream transition-colors"
+                      >
+                        My Orders
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          logout();
+                        }}
+                        className="py-2 px-3 text-xs font-medium border border-ayur-border text-ayur-terracotta-700 bg-white rounded-lg hover:bg-ayur-cream transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="text-xs text-ayur-charcoal-600 mb-1">
+                      Sign in for personalized Ayurvedic wellness & express checkout
+                    </div>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-semibold tracking-wide bg-ayur-green-900 text-white rounded-lg shadow-sm hover:bg-ayur-green-950 transition-colors min-h-[44px]"
+                    >
+                      <UserIcon className="w-4 h-4" />
+                      <span>Sign In / Register</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+
               {/* Quick Search */}
               <button
                 type="button"
@@ -389,7 +448,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
                   setMobileMenuOpen(false);
                   onOpenSearch();
                 }}
-                className="w-full flex items-center gap-3 p-3 bg-white rounded-lg border border-ayur-border text-sm text-ayur-charcoal-600"
+                className="w-full flex items-center gap-3 p-3 bg-white rounded-lg border border-ayur-border text-sm text-ayur-charcoal-600 min-h-[44px] hover:border-ayur-gold/50 transition-colors"
               >
                 <Search className="w-4 h-4 text-ayur-charcoal-400" />
                 <span>Search authentic products...</span>
@@ -398,18 +457,21 @@ export function Header({ onOpenSearch }: HeaderProps) {
               <div className="space-y-1">
                 <Link
                   href="/shop"
+                  onClick={() => setMobileMenuOpen(false)}
                   className="block py-2.5 px-3 rounded-md text-base font-medium text-ayur-charcoal-900 hover:bg-ayur-cream"
                 >
                   Shop All Products
                 </Link>
                 <Link
                   href="/combos"
+                  onClick={() => setMobileMenuOpen(false)}
                   className="block py-2.5 px-3 rounded-md text-base font-medium text-ayur-terracotta-700 hover:bg-ayur-cream"
                 >
                   Combos & Bundles
                 </Link>
                 <Link
                   href="/account/orders"
+                  onClick={() => setMobileMenuOpen(false)}
                   className="block py-2.5 px-3 rounded-md text-base font-medium text-ayur-charcoal-900 hover:bg-ayur-cream"
                 >
                   Track Orders
@@ -426,6 +488,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
                     <Link
                       key={cat.id}
                       href={`/shop?category=${cat.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="block py-2 px-3 rounded-md text-sm text-ayur-charcoal-800 hover:bg-ayur-cream"
                     >
                       {cat.name}
@@ -444,6 +507,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
                     <Link
                       key={c.id}
                       href={`/shop?concern=${c.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="block py-2 px-3 rounded-md text-sm text-ayur-charcoal-800 hover:bg-ayur-cream"
                     >
                       {c.name}
@@ -451,41 +515,6 @@ export function Header({ onOpenSearch }: HeaderProps) {
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Mobile Footer Auth */}
-            <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-ayur-border bg-ayur-cream/50">
-              {isAuthenticated && user ? (
-                <div className="space-y-2">
-                  <div className="text-sm font-medium text-ayur-charcoal-900">
-                    Signed in as {user.name}
-                  </div>
-                  <div className="flex gap-2">
-                    <Link
-                      href="/account"
-                      className="flex-1 text-center py-2 text-xs font-medium bg-ayur-green-900 text-white rounded-md"
-                    >
-                      Account
-                    </Link>
-                    <button
-                      onClick={logout}
-                      className="px-3 py-2 text-xs font-medium border border-ayur-border rounded-md text-ayur-charcoal-800"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full text-center py-2.5 text-sm font-medium bg-ayur-green-900 text-white rounded-md"
-                  >
-                    Sign In / Register
-                  </Link>
-                </div>
-              )}
             </div>
           </div>
         </div>
